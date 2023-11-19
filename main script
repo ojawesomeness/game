@@ -1,0 +1,146 @@
+import random
+import time
+
+class Spaceship:
+    def __init__(self, name, security_level):
+        self.name = name
+        self.security_level = security_level
+        self.is_hacked = False
+        self.data_value = random.randint(1, 10)
+
+    def hack(self, hacker_skill):
+        hack_success = random.randint(1, 10) + hacker_skill
+        self.is_hacked = hack_success > self.security_level
+        return self.is_hacked
+
+class Hacker:
+    def __init__(self, alias, skill_level):
+        self.alias = alias
+        self.skill_level = skill_level
+        self.inventory = []
+        self.reputation = 0
+        self.credits = 0
+
+    def attempt_hack(self, spaceship):
+        hack_success = random.randint(1, 10) + self.skill_level
+        self.is_hacked = hack_success > spaceship.security_level
+        return self.is_hacked
+
+    def steal_data(self, spaceship):
+        if spaceship.is_hacked:
+            print(f"{self.alias} successfully steals valuable data from {spaceship.name}.")
+            self.inventory.append({"Stolen Data": spaceship.data_value})
+            self.credits += spaceship.data_value
+            self.reputation += 1
+        else:
+            print(f"{self.alias} cannot steal data. Hack into the spaceship first!")
+
+def explore_galaxy():
+    print("You embark on a journey through the vast galaxy.")
+    time.sleep(1)
+    print("You encounter different space ships, each with its own challenges and rewards.")
+    time.sleep(1)
+
+def mission_completed(player):
+    print("Mission completed! You gain reputation and credits.")
+    time.sleep(1)
+    print(f"{player.alias}, your current inventory: {player.inventory}")
+    print(f"Reputation: {player.reputation}, Credits: {player.credits}")
+    time.sleep(1)
+
+def make_choice(prompt, options):
+    print(prompt)
+    for i, option in enumerate(options, start=1):
+        print(f"{i}. {option}")
+
+    choice = int(input("Enter your choice: "))
+    return choice
+
+def main():
+    player = Hacker(alias="ZeroCool", skill_level=7)
+    enemy_spaceship = Spaceship(name="DarkStar", security_level=8)
+
+    print(f"Welcome, {player.alias}! You encounter the spaceship {enemy_spaceship.name}.")
+    time.sleep(1)
+
+    explore_galaxy()
+
+    action = make_choice("Do you want to attempt to hack the spaceship?", ["Yes", "No"])
+
+    if action == 1:
+        if player.attempt_hack(enemy_spaceship):
+            print(f"Congratulations! You successfully hacked into {enemy_spaceship.name}.")
+            time.sleep(1)
+            print("You discover a hidden room with advanced technology.")
+            player.steal_data(enemy_spaceship)
+            mission_completed(player)
+        else:
+            print(f"Mission failed. {enemy_spaceship.name} remains secure.")
+    else:
+        print("You decide not to hack. The adventure continues.")
+
+    # Dynamic storyline choices
+    print("You receive a new mission: Infiltrate a high-security government space station.")
+    time.sleep(1)
+
+    government_station = Spaceship(name="Alpha Station", security_level=10)
+
+    action = make_choice(f"Do you want to attempt to hack {government_station.name}?", ["Yes", "No"])
+
+    if action == 1:
+        if player.attempt_hack(government_station):
+            print(f"Congratulations! You successfully hacked into {government_station.name}.")
+            time.sleep(1)
+            print("You find classified information and complete the mission.")
+            player.steal_data(government_station)
+            mission_completed(player)
+        else:
+            print(f"Mission failed. {government_station.name} remains secure.")
+    else:
+        print("You decide not to hack. The adventure continues.")
+
+    # New mission: Rescue a stranded AI from a damaged research vessel
+    print("You come across a distress signal from a damaged research vessel.")
+    time.sleep(1)
+
+    research_vessel = Spaceship(name="Quantum Explorer", security_level=6)
+
+    action = make_choice(f"Do you want to attempt to hack {research_vessel.name} and rescue the stranded AI?", ["Yes", "No"])
+
+    if action == 1:
+        if player.attempt_hack(research_vessel):
+            print(f"You successfully hack into {research_vessel.name} and rescue the stranded AI.")
+            time.sleep(1)
+            print("The AI is grateful and rewards you with advanced hacking tools.")
+            player.skill_level += 2
+            player.reputation += 2
+            mission_completed(player)
+        else:
+            print(f"Mission failed. {research_vessel.name} security protocols are too advanced.")
+    else:
+        print("You decide not to hack. The adventure continues.")
+
+    # Final mission: Confront a rival hacker
+    print("A rival hacker challenges you to a final showdown.")
+    time.sleep(1)
+
+    rival_hacker = Hacker(alias="DarkCipher", skill_level=8)
+
+    action = make_choice(f"Do you want to confront {rival_hacker.alias} in a hacking duel?", ["Yes", "No"])
+
+    if action == 1:
+        print(f"You engage in a fierce hacking duel with {rival_hacker.alias}.")
+        time.sleep(1)
+        if player.skill_level > rival_hacker.skill_level:
+            print(f"You emerge victorious against {rival_hacker.alias}.")
+            player.reputation += 5
+            mission_completed(player)
+        else:
+            print(f"You are defeated by {rival_hacker.alias}. Work on improving your skills.")
+    else:
+        print("You decide not to confront your rival. The adventure concludes.")
+
+    print("Thanks for playing!")
+
+if __name__ == "__main__":
+    main()
